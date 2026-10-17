@@ -68,6 +68,12 @@ median difference **+70** points. Read this with care: it shows CP-SAT beats *th
 synthetic generator when given 4 s. No instance was proven optimal within 4 s, so the gap to the optimum is unknown
 (the plan page shows the solver's best bound).
 
+**Longer time limit (15 s, `airops/results/limit_15s/`, same 100 seeds, 1824 s total):** CP-SAT median coverage **1400**
+(mean 1390.6 vs 1387.9 at 4 s), better on 99 / equal on 1 / worse on 0, median difference **+80**. Only **4 of 100** runs were
+proven `OPTIMAL` (96 still `FEASIBLE` at the limit), so most optimality gaps remain unknown. All 200 plans passed the validator.
+Churn: median 3.5 changed missions with persistence vs 27 without (fewer in 20 / 20). Regenerate with
+`python -m airops.bench.run_bench --time-limit 15 --out airops/results/limit_15s`.
+
 Churn after one controlled event (20 events, cycling the four types): median **4** changed missions with persistence
 (penalty + hints + 30-min freeze) versus **28** without; persistence changed fewer missions in 20 / 20 cases, at a
 median coverage of 1360 vs 1380 (the price of stability).
@@ -94,6 +100,6 @@ Actually executed on the final code in the development sandbox (Python 3.13, Nod
 * In-memory state, single user, no authentication (by design for the demo). Restarting the API resets plans.
 * One duty window per crew per horizon in the solver (validator is more permissive) — see CONSTRAINTS.md.
 * Corridor risk is evaluated over the mission's whole start window, not the exact flight time.
-* The benchmark's CP-SAT never proves optimality within 4 s; larger limits would tighten the comparison.
+* Even at 15 s CP-SAT proves optimality on only 4 of 100 benchmark instances.
 * Docker images were not built in the development environment (no Docker daemon available).
 * Out of scope for this release: courses of action, Monte-Carlo robustness, multi-base sync, LLM briefings, real data, pathfinding.
