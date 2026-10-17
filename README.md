@@ -36,6 +36,14 @@ python -m airops.bench.run_bench --instances 100 --time-limit 4 --churn-instance
 
 Then follow [docs/DEMO.md](docs/DEMO.md).
 
+## Demo video
+
+**[docs/demo/airpower_demo.mp4](docs/demo/airpower_demo.mp4)**: 3 min 52 s, 1280×720, narrated with burned-in captions.
+It is a screen recording of the real running app (fresh backend, real CP-SAT solves): baseline plan → dashboard → 3D theatre →
+aircraft-unavailable event → proposal with reason codes → changes in the theatre and timeline → approval → data fusion → benchmarks.
+The narration is generated offline (espeak-ng with an MBROLA voice). Regenerate it with `scripts/demo_video/record.cjs` and
+`scripts/demo_video/compose.py` (see the header of `record.cjs`).
+
 ## What is implemented
 
 | Area | Where |

@@ -16,3 +16,4 @@ web/dist/
 airops/results/test_report.json
 junit.xml
 e2e-output/
+demo-output/
