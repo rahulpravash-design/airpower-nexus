@@ -1,0 +1,18 @@
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+# node
+node_modules/
+web/dist/
+*.tsbuildinfo
+# env / local
+.env
+.DS_Store
+# generated at test time
+airops/results/test_report.json
+junit.xml
+e2e-output/

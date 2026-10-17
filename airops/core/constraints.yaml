@@ -1,0 +1,35 @@
+# AIR POWER planning configuration (synthetic / fictional scenario only).
+# Every key is validated by airops.core.config.PlanningConfig and editable
+# from the web UI (PUT /config).
+
+# ---- hard-rule parameters -------------------------------------------------
+crew_rest_hours: 10          # rest required after a duty period (and before the first sortie after prior duty)
+duty_limit_hours: 8          # max span of one crew duty window (first launch -> last recovery)
+turnaround_minutes: 60       # aircraft turnaround between consecutive sorties (multiple of 15)
+crew_turnaround_minutes: 15  # crew brief/debrief gap between consecutive sorties
+freeze_window_minutes: 30    # assignments launching within this window of "now" are frozen
+default_event_slot: 4        # slot ("now") at which retasking events occur (4 = T+1h)
+
+# ---- solver ---------------------------------------------------------------
+solver_time_limit_s: 8
+solver_workers: 4
+solver_seed: 26250
+
+# ---- objective weights (points) -------------------------------------------
+# objective = sum(priority_weight * cover)
+#           - risk_weight        * corridor_risk
+#           - change_penalty     * (aircraft/crew/corridor/loadout/timing changes vs previous plan)
+#           - low_trust_weight   * max(0, trust_threshold - trust)   (aircraft + crew)
+#           - serviceability_weight * (1 - predicted_serviceability) (aircraft)
+#           - fatigue_weight     * crew fatigue risk
+priority_weights: {1: 100, 2: 50, 3: 20}
+risk_weight: 8
+change_penalty: 10
+low_trust_weight: 20
+serviceability_weight: 10
+fatigue_weight: 5
+trust_threshold: 0.6
+
+# ---- data freshness -------------------------------------------------------
+fresh_minutes: 30     # age <= fresh: freshness factor 1.0
+stale_minutes: 180    # age >= stale: record flagged stale, freshness factor floor

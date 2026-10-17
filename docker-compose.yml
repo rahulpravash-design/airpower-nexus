@@ -1,0 +1,16 @@
+# AIR POWER: API (FastAPI + OR-Tools CP-SAT) and web UI (nginx). Everything runs locally and offline once built.
+#   docker compose up --build      ->  UI http://localhost:8080   API http://localhost:8000/docs
+services:
+  api:
+    build: { context: ., dockerfile: Dockerfile.api }
+    ports: ["8000:8000"]
+    environment:
+      AIROPS_RESULTS_DIR: /app/airops/results
+    volumes:
+      - ./airops/results:/app/airops/results
+    restart: unless-stopped
+  web:
+    build: { context: ./web }
+    ports: ["8080:80"]
+    depends_on: [api]
+    restart: unless-stopped

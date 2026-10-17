@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html, body, #root { height: 100%; }
+body {
+  @apply bg-bg text-ink font-sans antialiased;
+  background-image: radial-gradient(1200px 600px at 80% -10%, rgba(67,133,255,.10), transparent 60%),
+                    radial-gradient(900px 500px at -10% 110%, rgba(57,217,255,.06), transparent 60%);
+  background-attachment: fixed;
+}
+* { scrollbar-width: thin; scrollbar-color: #243653 transparent; }
+:focus-visible { outline: 2px solid #39D9FF; outline-offset: 2px; border-radius: 4px; }
+
+@layer components {
+  .panel { @apply rounded-xl border border-white/[0.06] bg-panel/85 shadow-[0_1px_0_rgba(255,255,255,.03)_inset]; }
+  .label { @apply text-[11px] font-medium uppercase tracking-[0.08em] text-muted; }
+  .num { @apply font-mono tabular-nums; }
+  .input { @apply w-full rounded-md border border-white/10 bg-bg2 px-2.5 py-1.5 text-sm text-ink placeholder:text-muted/60
+    focus:border-cyan/60 focus:outline-none disabled:opacity-50; }
+  .btn { @apply inline-flex items-center justify-center gap-1.5 rounded-md border border-white/10 bg-panel2 px-3 py-1.5
+    text-sm font-medium text-ink transition hover:border-cyan/40 hover:bg-[#1b2c47] disabled:cursor-not-allowed disabled:opacity-45; }
+  .btn-primary { @apply border-cyan/50 bg-cyan/15 text-cyan hover:bg-cyan/25; }
+  .btn-danger { @apply border-red/50 bg-red/10 text-red hover:bg-red/20; }
+  .btn-ok { @apply border-green/50 bg-green/10 text-green hover:bg-green/20; }
+}
+
+@keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+.skeleton { background: linear-gradient(90deg, #101B2D 25%, #1a2a44 50%, #101B2D 75%); background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  .skeleton { animation: none; }
+}
+.sr-only-focusable:not(:focus) { @apply sr-only; }

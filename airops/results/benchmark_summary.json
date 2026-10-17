@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "instances": 100,
+    "base_seed": 26250,
+    "time_limit_s": 4.0,
+    "workers": 4,
+    "churn_instances": 20,
+    "started_at": "2026-10-17T13:25:50.961956+00:00",
+    "finished_at": "2026-10-17T13:34:37.384780+00:00",
+    "duration_s": 526.4,
+    "ortools": "9.15.6755",
+    "python": "3.13.16",
+    "cpu_count": 4,
+    "cp_sat_setup": "no greedy hint, no fallback (pure CP-SAT within the time limit)",
+    "churn_setup": "controlled event per instance (cycle of 4 types); with = persistence penalty + hints + 30-min freeze; without = no penalty, no hints, no freeze"
+  },
+  "CP_SAT": {
+    "instances": 100,
+    "median_priority_weighted_coverage": 1385.0,
+    "mean_priority_weighted_coverage": 1387.9,
+    "median_missions_covered": 28.0,
+    "median_missions_uncovered": 2.0,
+    "median_risk_penalty": 81.9815,
+    "median_solve_time_s": 4.016,
+    "max_solve_time_s": 4.0938,
+    "status_counts": {
+      "FEASIBLE": 100
+    },
+    "all_hard_rules_valid": 100,
+    "time_limit_reached": 100,
+    "failures": 0
+  },
+  "GREEDY": {
+    "instances": 100,
+    "median_priority_weighted_coverage": 1320.0,
+    "mean_priority_weighted_coverage": 1312.7,
+    "median_missions_covered": 25.0,
+    "median_missions_uncovered": 5.0,
+    "median_risk_penalty": 81.8545,
+    "median_solve_time_s": 0.0178,
+    "max_solve_time_s": 0.0341,
+    "status_counts": {
+      "NOT_APPLICABLE": 100
+    },
+    "all_hard_rules_valid": 100,
+    "time_limit_reached": 0,
+    "failures": 0
+  },
+  "paired_comparison": {
+    "instances": 100,
+    "metric": "priority_weighted_coverage (CP_SAT minus GREEDY)",
+    "median_difference": 70.0,
+    "mean_difference": 75.2,
+    "cp_sat_better": 99,
+    "equal": 1,
+    "cp_sat_worse": 0
+  },
+  "churn": {
+    "instances": 20,
+    "median_changed_missions_with_persistence": 4.0,
+    "median_changed_missions_without_persistence": 28.0,
+    "mean_changed_missions_with_persistence": 5.15,
+    "mean_changed_missions_without_persistence": 27.5,
+    "persistence_fewer_changes": 20,
+    "equal": 0,
+    "persistence_more_changes": 0,
+    "median_coverage_with_persistence": 1360.0,
+    "median_coverage_without_persistence": 1380.0,
+    "all_valid": true
+  },
+  "statements": [
+    "Median priority-weighted coverage: CP-SAT 1385.0 vs greedy 1320.0 over 100 paired instances.",
+    "CP-SAT better on 99, equal on 1, worse on 0 instances (median difference 70.0).",
+    "Median changed missions after an event: 4.0 with persistence vs 28.0 without (20 controlled events)."
+  ]
+}

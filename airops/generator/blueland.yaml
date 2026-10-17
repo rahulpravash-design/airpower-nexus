@@ -1,0 +1,33 @@
+# BLUELAND -- a fully fictional theatre. Coordinates are local km (x east, y north).
+name: BLUELAND
+default_seed: 26250
+reference_time: "2026-03-01T06:00:00+00:00"   # T+0 of the 12 h horizon (fictional date)
+horizon_slots: 48
+slot_minutes: 15
+
+roles: [R1, R2, R3]            # abstract aircraft roles
+aircraft_per_role: 8           # 3 x 8 = 24 aircraft
+crew_count: 40
+mission_count: 30
+loadouts: [A, B, C]            # abstract load-out configurations
+
+bases:
+  - {id: BASE-A, name: Ridgemont,     x: 60,  y: 70,  runway_windows: [[0, 48]],           stock: {A: 4, B: 4, C: 3}}
+  - {id: BASE-B, name: Harbor Point,  x: 190, y: 250, runway_windows: [[0, 18], [24, 48]], stock: {A: 3, B: 4, C: 4}}
+  - {id: BASE-C, name: Highfield,     x: 330, y: 90,  runway_windows: [[2, 48]],           stock: {A: 4, B: 3, C: 4}}
+
+areas:
+  - {id: AREA-1, name: Kestrel Basin,  x: 150, y: 150}
+  - {id: AREA-2, name: Ironwood Ridge, x: 260, y: 200}
+  - {id: AREA-3, name: Saltmarsh,      x: 330, y: 230}
+  - {id: AREA-4, name: Northmere,      x: 100, y: 235}
+  - {id: AREA-5, name: Redcliff,       x: 250, y: 55}
+
+# Initial fictional, time-windowed threat zones (slots inclusive)
+threats:
+  - {id: THR-01, name: Zone Vesper, cx: 165, cy: 175, radius: 38, start: 8,  end: 30, severity: 0.6, blocking: false}
+  - {id: THR-02, name: Zone Quill,  cx: 275, cy: 140, radius: 32, start: 20, end: 44, severity: 0.5, blocking: false}
+
+# Initial fictional weather closures (slots [start, end))
+weather:
+  - {base: BASE-C, start: 30, end: 34, reason: WEATHER_BELOW_MINIMA}
