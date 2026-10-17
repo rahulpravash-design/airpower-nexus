@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip as RTooltip, XAxis, YAxis } from "recharts";
 import { Dialog } from "../components/ui/Dialog";
 import { useToast } from "../components/ui/Toast";
-import { EmptyState, Field, Panel, ProgressBar, Skeleton, Stat } from "../components/ui/primitives";
+import { EmptyState, Field, Panel, ProgressBar, Select, Skeleton, Stat } from "../components/ui/primitives";
 import { useData } from "../hooks/useData";
 import { api, describeError } from "../services/api";
 import type { BenchmarkPayload } from "../types/api";
@@ -15,8 +15,9 @@ export default function Benchmarks() {
   const [err, setErr] = useState<string | null>(null);
   const [form, setForm] = useState({ instances: 100, time_limit_s: 4, churn_instances: 20 });
   const [confirm, setConfirm] = useState(false);
+  const [variant, setVariant] = useState("default");
 
-  const load = useCallback(async () => { try { setB(await api.benchmarks()); setErr(null); } catch (e) { setErr(describeError(e)); } }, []);
+  const load = useCallback(async () => { try { setB(await api.benchmarks(variant)); setErr(null); } catch (e) { setErr(describeError(e)); } }, [variant]);
   useEffect(() => { void load(); }, [load, source]);
   useEffect(() => { if (b?.status !== "running") return; const t = setInterval(() => void load(), 2500); return () => clearInterval(t); }, [b?.status, load]);
 
@@ -40,7 +41,8 @@ export default function Benchmarks() {
     <div className="space-y-4">
       <Panel title="Benchmark laboratory" subtitle="CP-SAT vs greedy on seeded BLUELAND instances; every number below is read from the backend's own run."
         actions={<><button className="btn btn-primary" disabled={running || source !== "live"} onClick={() => setConfirm(true)}><FlaskConical className="h-4 w-4" />Run benchmark</button>
-          {b.available && <><a className="btn" href={api.benchmarkCsvUrl("instances")} download><Download className="h-4 w-4" />Instances CSV</a><a className="btn" href={api.benchmarkCsvUrl("churn")} download><Download className="h-4 w-4" />Churn CSV</a></>}</>}>
+          {b.variants.length > 1 && <Select aria-label="Result set" value={variant} onChange={(e) => setVariant(e.target.value)}>{b.variants.map((v) => <option key={v.id} value={v.id}>{v.label}</option>)}</Select>}
+          {b.available && <><a className="btn" href={api.benchmarkCsvUrl("instances", variant)} download><Download className="h-4 w-4" />Instances CSV</a><a className="btn" href={api.benchmarkCsvUrl("churn", variant)} download><Download className="h-4 w-4" />Churn CSV</a></>}</>}>
         {running && <div className="mb-2"><div className="mb-1 flex justify-between text-xs"><span>{pr.message || "starting…"}</span><span className="num">{pr.done}/{pr.total}</span></div><ProgressBar value={pr.total ? pr.done / pr.total : 0} /></div>}
         {b.status === "error" && <p className="text-sm text-red" role="alert">Benchmark failed: {b.error}</p>}
         {!b.available && !running && <EmptyState icon={<FlaskConical className="h-8 w-8" />} title="Not yet run" body="No benchmark results exist. Run the 100-instance benchmark (takes several minutes at the default 4 s CP-SAT limit) or execute `python -m airops.bench.run_bench`." />}

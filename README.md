@@ -71,7 +71,7 @@ synthetic generator when given 4 s. No instance was proven optimal within 4 s, s
 **Longer time limit (15 s, `airops/results/limit_15s/`, same 100 seeds, 1824 s total):** CP-SAT median coverage **1400**
 (mean 1390.6 vs 1387.9 at 4 s), better on 99 / equal on 1 / worse on 0, median difference **+80**. Only **4 of 100** runs were
 proven `OPTIMAL` (96 still `FEASIBLE` at the limit), so most optimality gaps remain unknown. All 200 plans passed the validator.
-Churn: median 3.5 changed missions with persistence vs 27 without (fewer in 20 / 20). Regenerate with
+Churn: median 3.5 changed missions with persistence vs 27 without (fewer in 20 / 20). The Benchmarks page has a result-set selector for both runs. Regenerate with
 `python -m airops.bench.run_bench --time-limit 15 --out airops/results/limit_15s`.
 
 Churn after one controlled event (20 events, cycling the four types): median **4** changed missions with persistence
@@ -87,7 +87,7 @@ Actually executed on the final code in the development sandbox (Python 3.13, Nod
 
 | Check | Result |
 |---|---|
-| `pytest` (backend: generator, validator rules, solver, greedy, fallback, freeze, 4 events, diff, API, WebSocket, config, benchmark) | **74 / 74 passed** (~70 s) |
+| `pytest` (backend: generator, validator rules, solver, greedy, fallback, freeze, 4 events, diff, API, WebSocket, config, benchmark) | **75 / 75 passed** (~70 s) |
 | `vitest` (API client, formatting, plan/diff helpers, 3-D geometry, UI components) | **23 / 23 passed** |
 | `tsc --noEmit` and `vite build` | exit 0 / built |
 | Headless-Chromium end-to-end (`scripts/e2e_browser.cjs`): baseline → 3-D theatre (real WebGL canvas) → event → proposal → approve → config change → reject → 390 px mobile layout | passes; **0 console errors, 0 requests to non-local hosts, no horizontal overflow** |

@@ -115,6 +115,7 @@ export type EventType = EventRequest["type"];
 export interface BenchmarkPayload {
   status: "idle" | "running" | "done" | "error"; progress: { done: number; total: number; message: string };
   error: string | null; params: Record<string, unknown>; available: boolean;
+  variant: string; variants: { id: string; label: string; time_limit_s: number | null; instances: number | null }[];
   summary: BenchmarkSummary | null; rows: Record<string, string>[]; churn: Record<string, string>[];
 }
 export interface MethodStats {

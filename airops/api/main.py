@@ -223,18 +223,45 @@ class BenchJob:
 bench_job = BenchJob()
 
 
-def _bench_payload() -> dict[str, Any]:
-    res = run_bench.load_results()
+def _bench_variants() -> dict[str, Path]:
+    """Result sets on disk: the default run (results dir) plus any sub-folder holding a benchmark_summary.json."""
+    root = run_bench.RESULTS_DIR
+    out: dict[str, Path] = {}
+    if (root / "benchmark_summary.json").exists():
+        out["default"] = root
+    if root.exists():
+        for d in sorted(root.iterdir()):
+            if d.is_dir() and (d / "benchmark_summary.json").exists():
+                out[d.name] = d
+    return out
+
+
+def _variant_dir(variant: str) -> Path:
+    found = _bench_variants()
+    if variant == "default" and variant not in found:
+        return run_bench.RESULTS_DIR  # nothing run yet
+    if variant not in found:  # also blocks path traversal: only discovered folder names are accepted
+        raise fail(404, "BENCHMARK_VARIANT_NOT_FOUND", f"unknown benchmark result set '{variant}'", sorted(found))
+    return found[variant]
+
+
+def _bench_payload(variant: str = "default") -> dict[str, Any]:
+    res = run_bench.load_results(_variant_dir(variant))
+    variants = []
+    for vid, d in _bench_variants().items():
+        meta = json.loads((d / "benchmark_summary.json").read_text()).get("meta", {})
+        variants.append({"id": vid, "label": f"{meta.get('time_limit_s', '?')} s CP-SAT limit · {meta.get('instances', '?')} instances",
+                         "time_limit_s": meta.get("time_limit_s"), "instances": meta.get("instances")})
     return {"status": bench_job.status, "progress": {"done": bench_job.done, "total": bench_job.total,
                                                       "message": bench_job.message},
-            "error": bench_job.error, "params": bench_job.params,
+            "error": bench_job.error, "params": bench_job.params, "variant": variant, "variants": variants,
             "available": res is not None, "summary": res["summary"] if res else None,
             "rows": res["rows"] if res else [], "churn": res["churn"] if res else []}
 
 
 @router.get("/benchmarks")
-def get_benchmarks() -> dict[str, Any]:
-    return _bench_payload()
+def get_benchmarks(variant: str = Query("default")) -> dict[str, Any]:
+    return _bench_payload(variant)
 
 
 @router.post("/benchmarks/run")
@@ -263,8 +290,8 @@ def run_benchmarks(req: BenchmarkRunRequest = Body(default_factory=BenchmarkRunR
 
 
 @router.get("/benchmarks/csv")
-def benchmark_csv(kind: str = Query("instances", pattern="^(instances|churn)$")):
-    path = run_bench.RESULTS_DIR / f"benchmark_{kind}.csv"
+def benchmark_csv(kind: str = Query("instances", pattern="^(instances|churn)$"), variant: str = Query("default")):
+    path = _variant_dir(variant) / f"benchmark_{kind}.csv"
     if not path.exists():
         raise fail(404, "BENCHMARK_NOT_RUN", "no benchmark results exist yet; run the benchmark first")
     return FileResponse(path, media_type="text/csv", filename=path.name)

@@ -188,3 +188,16 @@ def test_spa_pages_that_share_api_names_serve_the_web_app_to_browsers(client, tm
         assert html.status_code == 200 and "<title>spa</title>" in html.text
         js = client.get(path, headers={"accept": "application/json"})
         assert js.status_code == 200 and js.headers["content-type"].startswith("application/json")
+
+
+def test_benchmark_variants_are_discovered_and_selectable(client, tmp_path, monkeypatch):
+    from airops.bench.run_bench import run_benchmark
+    run_benchmark(instances=1, time_limit=0.5, churn_instances=0, out_dir=tmp_path)
+    run_benchmark(instances=1, time_limit=1.0, churn_instances=0, out_dir=tmp_path / "limit_1s")
+    b = client.get("/benchmarks").json()
+    assert {v["id"] for v in b["variants"]} == {"default", "limit_1s"} and b["summary"]["meta"]["time_limit_s"] == 0.5
+    b2 = client.get("/benchmarks?variant=limit_1s").json()
+    assert b2["variant"] == "limit_1s" and b2["summary"]["meta"]["time_limit_s"] == 1.0
+    assert client.get("/benchmarks/csv?variant=limit_1s").status_code == 200
+    assert client.get("/benchmarks?variant=..").status_code == 404
+    assert client.get("/benchmarks/csv?variant=../x").status_code == 404

@@ -58,10 +58,12 @@ export const api = {
   updateConfig: (patch: Partial<PlanningConfig>) =>
     request<ConfigResponse>("/config", { method: "PUT", body: JSON.stringify(patch) }),
   fusion: () => request<FusionReport>("/fusion"),
-  benchmarks: () => request<BenchmarkPayload>("/benchmarks", { headers: { Accept: "application/json" } }),
+  benchmarks: (variant = "default") =>
+    request<BenchmarkPayload>(`/benchmarks?variant=${encodeURIComponent(variant)}`, { headers: { Accept: "application/json" } }),
   runBenchmarks: (p: { instances: number; time_limit_s: number; churn_instances: number }) =>
     post<BenchmarkPayload>("/benchmarks/run", p),
-  benchmarkCsvUrl: (kind: "instances" | "churn") => `${API_BASE}/benchmarks/csv?kind=${kind}`,
+  benchmarkCsvUrl: (kind: "instances" | "churn", variant = "default") =>
+    `${API_BASE}/benchmarks/csv?kind=${kind}&variant=${encodeURIComponent(variant)}`,
   diagnostics: () => request<Diagnostics>("/diagnostics"),
 };
 
