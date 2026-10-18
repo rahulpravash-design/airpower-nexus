@@ -62,8 +62,19 @@ function duration(f) {
 }
 
 (async () => {
-  // 1. narration first, so every scene lasts at least as long as its voice-over
+  // 1. narration first, so every scene lasts at least as long as its voice-over.
+  //    AUDIO_DIR=<dir with <scene>.mp3> uses pre-generated clips (e.g. ElevenLabs) and the lines in
+  //    narration_elevenlabs.json; a scene without a clip stays silent for SILENT_S seconds (caption only).
+  const AUDIO_DIR = process.env.AUDIO_DIR;
+  const lines = AUDIO_DIR ? JSON.parse(fs.readFileSync(path.join(__dirname, "narration_elevenlabs.json"), "utf8")) : {};
   for (const s of SCENES) {
+    if (AUDIO_DIR) {
+      s.text = lines[s.id] || s.text;
+      const f = path.join(AUDIO_DIR, `${s.id}.mp3`);
+      s.audio = fs.existsSync(f) ? f : null;
+      s.dur = s.audio ? duration(s.audio) : parseFloat(process.env.SILENT_S || "6");
+      continue;
+    }
     s.audio = path.join(OUT, "audio", `${s.id}.wav`);
     execFileSync("espeak-ng", ["-v", VOICE, "-s", "148", "-g", "4", "-w", s.audio, s.text]);
     s.dur = duration(s.audio);

@@ -38,11 +38,13 @@ Then follow [docs/DEMO.md](docs/DEMO.md).
 
 ## Demo video
 
-**[docs/demo/airpower_demo.mp4](docs/demo/airpower_demo.mp4)**: 3 min 52 s, 1280×720, narrated with burned-in captions.
-It is a screen recording of the real running app (fresh backend, real CP-SAT solves): baseline plan → dashboard → 3D theatre →
-aircraft-unavailable event → proposal with reason codes → changes in the theatre and timeline → approval → data fusion → benchmarks.
-The narration is generated offline (espeak-ng with an MBROLA voice). Regenerate it with `scripts/demo_video/record.cjs` and
-`scripts/demo_video/compose.py` (see the header of `record.cjs`).
+**[docs/demo/airpower_demo.mp4](docs/demo/airpower_demo.mp4)**: 3 min 01 s, 1280×720, with an ElevenLabs voice-over
+(voice "Jacob L.", model `eleven_v4`) and burned-in captions. It is a screen recording of the real running app (fresh backend, real
+CP-SAT solves): baseline plan → dashboard → 3D theatre → aircraft-unavailable event → proposal with reason codes → changes in the
+theatre and timeline → approval → data fusion → benchmarks. The timeline and approval scenes are caption-only (ElevenLabs refused those
+two clips). The narration lines are in `scripts/demo_video/narration_elevenlabs.json`. Re-record with
+`AUDIO_DIR=<folder of <scene>.mp3> node scripts/demo_video/record.cjs`, then `python3 scripts/demo_video/compose.py <out>`.
+Without `AUDIO_DIR` it falls back to an offline espeak-ng voice.
 
 ## What is implemented
 

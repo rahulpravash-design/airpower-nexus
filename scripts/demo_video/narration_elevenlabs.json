@@ -1,0 +1,18 @@
+{
+  "_comment": "Narration used for the ElevenLabs voice-over (voice: Jacob L., model eleven_v4). Captions are derived from these lines.",
+  "intro": "This is AIR POWER, our solution for Smart India Hackathon problem statement two-six-two-five-zero. It plans air missions for a fictional theatre called Blueland: three bases, twenty-four aircraft, forty crew, and thirty missions across a twelve-hour horizon. Everything you see runs on synthetic data.",
+  "baseline": "We start by generating the baseline plan. The backend runs Google O-R Tools C-P-SAT, a constraint-programming solver, with an eight-second limit. It decides which missions to cover, and assigns the aircraft, crew, base, route corridor and load-out for each one.",
+  "overview": "Every number on this dashboard comes straight from the solver's real result. If a mission can't be served safely, it's left uncovered instead of breaking a rule. An independent validator then re-checks all seventeen hard rules: aircraft roles, turnaround, crew qualifications, duty and rest limits, runway and weather windows, and load-out stock.",
+  "theatre": "This is the 3D digital theatre. Everything here is drawn from the scenario and the plan: the bases, mission nodes, route corridors, and time-windowed threat zones. We can orbit, zoom and pan freely.",
+  "play": "Pressing play moves the mission clock. Each aircraft flies its assigned corridor, out and back, exactly when the plan schedules it.",
+  "base": "Selecting a base shows its runway windows, how much of its load-out stock is in use, and how many missions it supports.",
+  "event": "Now, something changes. In the replanning center, we report an aircraft as unavailable. The system suggests the aircraft that matters most to the current plan, and asks us to confirm before anything is sent.",
+  "solve": "The backend re-plans in about a second. Assignments launching in the next thirty minutes are frozen, and unnecessary changes are penalized, so the rest of the plan stays stable.",
+  "proposal": "The result is a proposal, not an automatic change. It shows the solver status and time, which missions changed and which stayed the same, and a reason code for every change, backed by evidence.",
+  "changes": "Back in the theatre, the changed mission is highlighted in amber, with its old and new routes. Only changes that really exist in the returned plan are animated.",
+  "timeline": "The timeline compares the old and new plans in fifteen-minute slots, including turnaround periods and frozen assignments.",
+  "approve": "A human always makes the final call. We approve, and the new plan becomes active only after the backend confirms it.",
+  "fusion": "Data fusion scores every input record for freshness, validity and conflicts. Trust is kept separate from aircraft serviceability, which comes from a model trained and evaluated on synthetic data only.",
+  "bench": "Finally, the benchmark laboratory. Across one hundred generated scenarios with a four-second limit, C-P-SAT beat our greedy baseline on priority-weighted coverage in ninety-nine cases and tied in one, and every plan passed the validator. With a fifteen-second limit, the median rose from thirteen eighty-five to fourteen hundred.",
+  "outro": "AIR POWER. Every report verified. Every post stocked before the pass closes. Thank you."
+}
